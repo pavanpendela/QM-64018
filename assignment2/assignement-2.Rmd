@@ -1,0 +1,48 @@
+---
+title: "assignemnt 2"
+author: "pavan"
+date: "04/10/2021"
+output: html_document
+---
+
+```{r }
+library(lpSolveAPI)
+setwd("C:/Users/pavankumar pendela/Desktop/MSBA/Quantiative management Dr.Wu")
+```
+
+```{r }
+lpec1<-make.lp(0,9)
+set.objfn(lpec1,c(300,300,300,360,360,360,420,420,420))
+lp.control(lpec1,sense='max')
+```
+
+
+```{r }
+add.constraint(lpec1,c(1,1,1,0,0,0,0,0,0),"<=",750)
+add.constraint(lpec1,c(0,0,0,1,1,1,0,0,0),"<=",1200)
+add.constraint(lpec1,c(0,0,0,0,0,0,1,1,1),"<=",900)
+add.constraint(lpec1,c(1,0,0,1,0,0,1,0,0),"<=",750)
+add.constraint(lpec1,c(0,1,0,0,1,0,0,1,0),"<=",900)
+add.constraint(lpec1,c(0,0,1,0,0,1,0,0,1),"<=",450)
+add.constraint(lpec1,c(12,0,0,15,0,0,20,0,0),"<=",13000)
+add.constraint(lpec1,c(0,12,0,0,15,0,0,20,0),"<=",12000)
+add.constraint(lpec1,c(0,0,12,0,0,15,0,0,20),"<=",5000)
+Colnames<-c("X11","X21","X31","X12","X22","X32","X13","X23","X33")
+Rownames<-c("z1","z2","z3","z4","z5","z6","z7","z8","z9")
+dimnames(lpec1)<-list(Rownames,Colnames)
+```
+
+
+```{r }
+write.lp(lpec1,filename = "assignemnt 2",type = "lp")
+solve(lpec1)
+get.objective(lpec1)
+```
+The profit is 708000
+```{r }
+get.variables(lpec1)
+```
+The value is 0,500,250,400,400,133.3,350,0,0
+
+```{r }
+```
