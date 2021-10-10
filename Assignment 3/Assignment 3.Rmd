@@ -1,0 +1,89 @@
+---
+title: "assignment 3"
+author: "pavan"
+date: "10/10/2021"
+output: html_document
+---
+```{r }
+library(lpSolveAPI)
+setwd("C:/Users/pavankumar pendela/Desktop/MSBA/Quantiative management Dr.Wu")
+```
+
+```{r }
+lpec1<-make.lp(0,9)
+set.objfn(lpec1,c(300,300,300,360,360,360,420,420,420))
+lp.control(lpec1,sense='max')
+```
+
+```{r }
+#sales constraints
+add.constraint(lpec1,c(1,0,0,1,0,0,1,0,0),"<=",750)
+add.constraint(lpec1,c(0,1,0,0,1,0,0,1,0),"<=",900)
+add.constraint(lpec1,c(0,0,1,0,0,1,0,0,1),"<=",450)
+# storage constraints
+add.constraint(lpec1,c(12,0,0,15,0,0,20,0,0),"<=",13000)
+add.constraint(lpec1,c(0,12,0,0,15,0,0,20,0),"<=",12000)
+add.constraint(lpec1,c(0,0,12,0,0,15,0,0,20),"<=",5000)
+# production constraints
+add.constraint(lpec1,c(0,0,0,0,0,0,1,1,1),"<=",900)
+add.constraint(lpec1,c(0,0,0,1,1,1,0,0,0),"<=",1200)
+add.constraint(lpec1,c(1,1,1,0,0,0,0,0,0),"<=",750)
+# excess production percentage constraints
+add.constraint(lpec1,c(900,-750,0,900,-750,0,900,-750,0),"=",0)
+add.constraint(lpec1,c(450,0,-750,450,0,-750,450,0,-750),"=",0)
+Colnames<-c("X1s","X2s","X3s","X1m","X2m","X3m","X1L","X2L","X3L")
+Rownames<-c("c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11")
+dimnames(lpec1)<-list(Rownames,Colnames)
+```
+
+
+```{r }
+write.lp(lpec1,filename = "Assignment3.lp",type = "lp")
+solve(lpec1)
+get.objective(lpec1)
+```
+The profit is 696000
+
+```{r }
+
+get.variables(lpec1)
+```
+
+```{r }
+# To get shadow price
+get.sensitivity.rhs(lpec1)
+```
+
+```{r}
+# to get reduced price
+get.sensitivity.obj(lpec1)
+```
+
+```{r}
+lpec2<-make.lp(0,11)
+set.objfn(lpec2,c(750,900,450,13000,12000,5000,900,1200,750,0,0))
+add.constraint(lpec2,c(1,0,0,12,0,0,1,0,0,900,450),">=",300)
+add.constraint(lpec2,c(0,1,0,0,12,0,1,0,0,-750,0),">=",300)
+add.constraint(lpec2,c(0,0,1,0,0,12,1,0,0,0,-750),">=",300)
+add.constraint(lpec2,c(1,0,0,15,0,0,0,1,0,900,450),">=",360)
+add.constraint(lpec2,c(0,1,0,0,15,0,0,1,0,-750,0),">=",360)
+add.constraint(lpec2,c(0,0,1,0,0,15,0,1,0,0,-750),">=",360)
+add.constraint(lpec2,c(1,0,0,20,0,0,0,0,1,900,450),">=",420)
+add.constraint(lpec2,c(0,1,0,0,20,0,0,0,1,-750,0),">=",420)
+add.constraint(lpec2,c(0,0,1,0,0,20,0,0,1,0,-750),">=",420)
+set.bounds(lpec2,lower = c(0,0,0,0,0,0,0,0,0,-Inf,-Inf))
+write.lp(lpec2,filename = "DualAssignment3.lp",type = "lp")
+solve(lpec2)
+get.objective(lpec2)
+```
+It's the same model as assignment 3. The answer is to follow the assignment3 model.
+
+```{r}
+get.variables(lpec2)
+get.sensitivity.rhs(lpec2)
+```
+It's the same model as assignment 3. The answer is to follow the assignment3 model.
+
+```{r}
+get.sensitivity.obj(lpec2)
+```
