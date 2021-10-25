@@ -1,0 +1,10 @@
+/* Objective function */
+min: +622 PlantA to warehouse1 +614 PlantA to warehouse2 +630 PlantA to warehouse3 +641 PlantB to warehouse1
+ +645 PlantB to warehouse2 +649 Plant B to warehouse3;
+
+/* Constraints */
+Plant A capacity: +PlantA to warehouse1 +PlantA to warehouse2 +PlantA to warehouse3 <= 100;
+Plant B capacity: +PlantB to warehouse1 +PlantB to warehouse2 +Plant B to warehouse3 <= 120;
+warehouse 1 demand: +PlantA to warehouse1 +PlantB to warehouse1 = 80;
+warehouse 2 demand: +PlantA to warehouse2 +PlantB to warehouse2 = 60;
+Warehouse 3 Demand: +PlantA to warehouse3 +Plant B to warehouse3 = 70;

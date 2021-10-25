@@ -1,0 +1,73 @@
+---
+title: "assignment 4"
+author: "pavan"
+date: "23/10/2021"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+# setting working directory and loading packages
+
+```{r }
+setwd("C:/Users/pavankumar pendela/Desktop/MSBA/Quantiative management Dr.Wu/assignment 4")
+library(lpSolve)
+library(lpSolveAPI)
+```
+
+```{r }
+lpec <- make.lp(5,6)
+set.objfn(lpec, c(622,614,630,641,645,649))
+lp.control(lpec, sense = "min")
+```
+```{r }
+# Production Capacity Constraints:
+set.row(lpec, 1, c(1,1,1), indices = c(1,2,3))
+set.row(lpec, 2, c(1,1,1), indices = c(4,5,6))
+# Warehouse demand Constraints:
+set.row(lpec, 3, c(1,1), indices = c(1,4))
+set.row(lpec, 4, c(1,1), indices = c(2,5))
+set.row(lpec, 5, c(1,1), indices = c(3,6))
+# Setting the rhs values
+rhs <- c(100,120,80,60,70)
+set.rhs(lpec, rhs)
+# Setting the constraint type
+set.constr.type(lpec, c("<=","<=","=","=","="))
+```
+
+```{r}
+# boundary condiiton for the decision variables
+set.bounds(lpec, lower = rep(0, 6))
+# Set the names of the rows (constraints) and columns (decision variables)
+lp.rownames <- c("Plant A capacity", "Plant B capacity", "warehouse 1 demand", "warehouse 2 demand", "Warehouse 3 Demand")
+lp.colnames <- c("PlantA to warehouse1", "PlantA to warehouse2", "PlantA to warehouse3", "PlantB to warehouse1", "PlantB to warehouse2", "Plant B to warehouse3")
+dimnames(lpec) <- list(lp.rownames, lp.colnames)
+```
+
+```{r}
+# Return the linear programming object to ensure the values are correct
+lpec
+write.lp(lpec, filename = "assignment 4 lp", type = "lp")
+```
+# Solve the linear program
+```{r}
+solve(lpec)
+```
+"0" is the optimal solution for the problem
+
+```{r}
+get.objective(lpec)
+```
+1,32,790 is the production cost based on the given values
+
+```{r}
+get.variables(lpec)
+```
+Plant A Units Shipped to warehouse 1: 0 units 
+Plant A Units Shipped to warehouse 2: 60 units 
+Plant A Units Shipped to warehouse 3: 40 units 
+Plant B Units Shipped to warehouse 1: 80 units 
+Plant B Units Shipped to warehouse 2: 0 units 
+
+
+
